@@ -1,5 +1,10 @@
 package model.actors;
 
+import model.module.OwnerModule;
+import model.publication.Publication;
+
+import java.util.ArrayList;
+
 abstract public class Owner implements Mentionable {
     private String nom;
 
@@ -7,10 +12,11 @@ abstract public class Owner implements Mentionable {
         return nom;
     }
 
+    private final OwnerModule mod = new OwnerModule();
+
     @Override
     public String toString(){
-        StringBuilder SB = new StringBuilder();
-        SB.append("Nom du propriétaire : ").append(nom);
-        return SB.toString();
+        return "Nom du propriétaire : " + nom;
     }
+
 }

@@ -8,13 +8,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Observable;
 
-public abstract class Publication extends Observable {
+public abstract class Publication{
     private Date date;
     private String title;
     private Media source;
     private ArrayList<Mentionable> mentions;
 
-    static private OwnerModule mod = new OwnerModule();
+
 
     public Publication(Date date, String title, Media source, ArrayList<Mentionable> mentions){
         this.date   = date;
