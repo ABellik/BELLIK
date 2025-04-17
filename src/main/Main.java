@@ -1,17 +1,46 @@
 package main;
 
+
+import data.IndividualDataLoader;
+import data.MediaDataLoader;
+import data.OrganizationDataLoader;
+import model.actors.Individual;
+import model.actors.Organization;
+import model.media.Media;
+
+
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
+        List<Individual> individuals = new ArrayList<>(new IndividualDataLoader().load());
+        List<Organization> organizations = new ArrayList<>(new OrganizationDataLoader().load());
+        List<Media> medias = new ArrayList<>(new MediaDataLoader().load());
 
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            System.out.println("i = " + i);
-        }
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Bienvenue sur la vigie des médias !");
+        System.out.print("""
+                Que souhaitez-vous faire :
+                \t1. Obtenir un renseignement\
+                
+                \t2. Simuler une publication\
+                
+                \t3. Simuler un rachat de part de propriétés\
+                
+                \t4. Quitter\
+                
+                
+                Veuillez saisir votre choix :\s""");
+        int choix = scanner.nextInt();
+        System.out.println("Ok ! Vous avez choisi "+choix);
+        if(choix==4) System.exit(0);
+
+
     }
 }

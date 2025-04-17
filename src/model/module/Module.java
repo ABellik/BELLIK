@@ -8,4 +8,5 @@ public abstract class Module extends Observable implements Observer {
     public synchronized void addObserver(Observer o) {
         super.addObserver(o);
     }
+
 }
