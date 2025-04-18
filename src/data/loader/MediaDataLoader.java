@@ -1,4 +1,4 @@
-package data;
+package data.loader;
 
 import model.media.*;
 

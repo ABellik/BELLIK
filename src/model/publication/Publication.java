@@ -36,4 +36,8 @@ public abstract class Publication{
     public Media getSource() {
         return source;
     }
+
+    public List<Mentionable> getMentions(){
+        return mentions;
+    }
 }

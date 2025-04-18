@@ -1,4 +1,4 @@
-package data;
+package data.loader;
 
 import java.util.List;
 

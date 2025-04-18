@@ -1,6 +1,8 @@
 package model.actors;
 
-public class Organization extends Owner {
+import model.ownership.Appropriable;
+
+public class Organization extends Owner implements Appropriable {
     private final String comment;
 
     public Organization(String name, String comment){

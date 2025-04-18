@@ -1,6 +1,7 @@
 package model.media;
 
 import exceptions.PublicationTypeException;
+import model.actors.Individual;
 import model.actors.Mentionable;
 import model.actors.Owner;
 import model.publication.Interview;
@@ -34,8 +35,8 @@ public class Television extends Media{
         }
 
         for(Mentionable m : mentions) {
-            if(m instanceof Owner){
-                this.addObserver(((Owner) m).getMod());
+            if(m instanceof Individual){
+                this.addObserver(((Individual) m).getMod());
             }
         }
 
@@ -43,8 +44,8 @@ public class Television extends Media{
         notifyObservers(pub);
 
         for(Mentionable m : mentions) {
-            if(m instanceof Owner){
-                this.deleteObserver(((Owner) m).getMod());
+            if(m instanceof Individual){
+                this.deleteObserver(((Individual) m).getMod());
             }
         }
     }

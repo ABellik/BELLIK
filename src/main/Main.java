@@ -1,31 +1,17 @@
 package main;
 
 
-import data.IndividualDataLoader;
-import data.MediaDataLoader;
-import data.OrganizationDataLoader;
-import model.actors.Individual;
-import model.actors.Organization;
-import model.media.Media;
-
-
-
-import java.util.ArrayList;
-import java.util.List;
+import data.repository.DataRepository;
 import java.util.Scanner;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) {
-        List<Individual> individuals = new ArrayList<>(new IndividualDataLoader().load());
-        List<Organization> organizations = new ArrayList<>(new OrganizationDataLoader().load());
-        List<Media> medias = new ArrayList<>(new MediaDataLoader().load());
-
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Bienvenue sur la vigie des médias !");
-        System.out.print("""
+        /*System.out.print("""
                 Que souhaitez-vous faire :
                 \t1. Obtenir un renseignement\
                 
@@ -36,11 +22,39 @@ public class Main {
                 \t4. Quitter\
                 
                 
-                Veuillez saisir votre choix :\s""");
-        int choix = scanner.nextInt();
-        System.out.println("Ok ! Vous avez choisi "+choix);
-        if(choix==4) System.exit(0);
+                Veuillez saisir votre choix :\s""");*/
 
+        while(true) {
+            System.out.print("""
+                    Que souhaitez-vous faire :
+                    \t1. Afficher les individus\
+                    
+                    \t2. Afficher les organisations\
+                    
+                    \t3. Afficher les médias\
+                    
+                    \t4. Afficher les possessions\
+                    
+                    \t5. Afficher les possessions\
+                    
+                    
+                    Veuillez saisir votre choix :\s""");
 
+            int choix = scanner.nextInt();
+            System.out.println("Ok ! Vous avez choisi " + choix);
+            if(choix == 1){
+                System.out.println(DataRepository.getIndividuals());
+            }
+            else if(choix == 2){
+                System.out.println(DataRepository.getOrganizations());
+            }
+            else if(choix == 3){
+                System.out.println(DataRepository.getMedias());
+            }
+            else if(choix == 4){
+                System.out.println(DataRepository.getOwnerships());
+            }
+            else if (choix == 5) System.exit(0);
+        }
     }
 }

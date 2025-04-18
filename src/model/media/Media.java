@@ -62,4 +62,8 @@ public abstract class Media extends Observable implements Mentionable, Appropria
     public MediaModule getMod() {
         return mod;
     }
+
+    public String getName() {
+        return name;
+    }
 }
