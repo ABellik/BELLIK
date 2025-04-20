@@ -28,4 +28,12 @@ abstract public class Owner extends Observable implements Mentionable {
     public void addOwnership(Ownership o){
         ownerships.add(o);
     }
+
+    public void removeOwnership(Ownership o){
+        ownerships.remove(o);
+    }
+
+    public List<Ownership> getOwnerships(){
+        return ownerships;
+    }
 }

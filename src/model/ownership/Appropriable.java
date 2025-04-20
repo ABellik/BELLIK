@@ -1,9 +1,10 @@
 package model.ownership;
 
-import model.actors.Owner;
-
 import java.util.ArrayList;
+import java.util.List;
 
 public interface Appropriable {
-    //public ArrayList<Owner> getOwners();
+    public void addShare(Ownership o);
+    public void removeShare(Ownership o);
+    public List<Ownership> getShares();
 }

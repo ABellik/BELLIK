@@ -3,6 +3,7 @@ package data.loader;
 import data.repository.DataRepository;
 import model.ownership.Ownership;
 
+import javax.xml.crypto.Data;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -38,7 +39,10 @@ public class OwnershipDataLoader extends DataLoader<Ownership>{
                     double p4 = (colonnes.length > 3 && !Objects.equals(colonnes[3], "")) ? Double.parseDouble(colonnes[3].substring(0,colonnes[3].length() - 1)) : 0.0;
                     String p5 = colonnes[4];
                     try {
-                        ownerships.add(new Ownership(p1, DataRepository.searchOwner(p2), DataRepository.searchAppropriable(p5), p4));
+                        Ownership o = new Ownership(p1, DataRepository.searchOwner(p2), DataRepository.searchAppropriable(p5), p4);
+                        ownerships.add(o);
+                        DataRepository.searchOwner(p2).addOwnership(o);
+                        DataRepository.searchAppropriable(p5).addShare(o);
                     } catch (NoSuchElementException e) {
                         System.out.println("Warning ! "+p2+" ou "+p5+" semblent être inconnu");
                     }

@@ -16,11 +16,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-public class DataRepository {
-    private static final List<Individual> individuals = new ArrayList<>(new IndividualDataLoader().load());
-    private static final List<Organization> organizations = new ArrayList<>(new OrganizationDataLoader().load());
-    private static final List<Media> medias = new ArrayList<>(new MediaDataLoader().load());
-    private static final List<Ownership> ownerships = new ArrayList<>(new OwnershipDataLoader().load());
+public abstract class DataRepository {
+    private static final List<Individual> individuals = new ArrayList<>();
+    private static final List<Organization> organizations = new ArrayList<>();
+    private static final List<Media> medias = new ArrayList<>();
+    private static final List<Ownership> ownerships = new ArrayList<>();
+
+    public static void initialize(){
+        individuals.addAll(new IndividualDataLoader().load());
+        organizations.addAll(new OrganizationDataLoader().load());
+        medias.addAll(new MediaDataLoader().load());
+        ownerships.addAll(new OwnershipDataLoader().load());
+    }
 
     public static List<Individual> getIndividuals() {
         return individuals;

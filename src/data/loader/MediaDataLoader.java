@@ -33,12 +33,12 @@ public class MediaDataLoader extends DataLoader<Media>{
                     boolean p6 = Boolean.parseBoolean((colonnes.length > 5 && !Objects.equals(colonnes[5], "")) ? colonnes[5] : "");
                     medias.add(new Television(p1,p4,p5,p6));
                 }
-                else if(p2.equals("Site")){
+                /*else if(p2.equals("Site")){
                     String p4 = (colonnes.length > 3 && !Objects.equals(colonnes[3], "")) ? colonnes[3] : "";
                     String p5 = (colonnes.length > 4 && !Objects.equals(colonnes[4], "")) ? colonnes[4] : "";
                     boolean p6 = Boolean.parseBoolean((colonnes.length > 5 && !Objects.equals(colonnes[5], "")) ? colonnes[5] : "");
                     medias.add(new Site(p1,p4,p5,p6));
-                }
+                }*/
                 else if(p2.contains("Presse")){
                     String p3 = (colonnes.length > 2 && !Objects.equals(colonnes[2], "")) ? colonnes[2] : "";
                     String p4 = (colonnes.length > 3 && !Objects.equals(colonnes[3], "")) ? colonnes[3] : "";
@@ -53,10 +53,11 @@ public class MediaDataLoader extends DataLoader<Media>{
                     medias.add(new Radio(p1,p4,p5,p6));
                 }
                 else{
-                    String p4 = (colonnes.length > 3 && !Objects.equals(colonnes[3], "")) ? colonnes[3] : "";
+                    /*String p4 = (colonnes.length > 3 && !Objects.equals(colonnes[3], "")) ? colonnes[3] : "";
                     String p5 = (colonnes.length > 4 && !Objects.equals(colonnes[4], "")) ? colonnes[4] : "";
                     boolean p6 = Boolean.parseBoolean((colonnes.length > 5 && !Objects.equals(colonnes[5], "")) ? colonnes[5] : "");
-                    medias.add(new OtherMedia(p1,p4,p5,p6));
+                    medias.add(new OtherMedia(p1,p4,p5,p6));*/
+                    System.out.println(colonnes[0]+" n'a pas été retenu car n'est ni une Presse, ni une télévision, ni une radio");
                 }
             }
 

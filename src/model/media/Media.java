@@ -18,7 +18,7 @@ public abstract class Media extends Observable implements Mentionable, Appropria
     private boolean disappeared;
 
     private final List<Publication> publications = new ArrayList<>();
-    private final List<Ownership> ownerships = new ArrayList<>();
+    private final List<Ownership> shares = new ArrayList<>();
 
     private final MediaModule mod = new MediaModule(this);
 
@@ -55,8 +55,20 @@ public abstract class Media extends Observable implements Mentionable, Appropria
         this.disappeared = disappeared;
     }
 
-    public void addOwnership(Ownership o){
-        ownerships.add(o);
+    @Override
+    public List<Ownership> getShares(){
+        return shares;
+    }
+
+    @Override
+    public void addShare(Ownership o){
+        shares.add(o);
+
+    }
+
+    @Override
+    public void removeShare(Ownership o){
+        shares.remove(o);
     }
 
     public MediaModule getMod() {
