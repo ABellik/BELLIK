@@ -1,11 +1,12 @@
 package model.module;
 
 import model.actors.Mentionable;
+import model.actors.Owner;
 import model.media.Media;
+import model.ownership.Ownership;
 import model.publication.Publication;
 
-import java.util.HashMap;
-import java.util.Observable;
+import java.util.*;
 
 public class MediaModule extends Module {
     private static final double seuil = 0.1;
@@ -24,15 +25,20 @@ public class MediaModule extends Module {
 
     private final HashMap<Mentionable, Integer> mentionsMap = new HashMap<>();
     private final Media media;
+    private final List<Ownership> sharesHistory = new ArrayList<>();
+    private final Set<Owner> owners = new HashSet<>();
 
     public MediaModule(Media media){
         this.media = media;
+        sharesHistory.addAll(media.getShares());
+        for(Ownership o : media.getShares()){
+            owners.add(o.getOrigin());
+        }
     }
 
     @Override
     public void update(Observable o, Object arg) {
-        if (arg instanceof Publication){
-            Publication p = (Publication) arg;
+        if (arg instanceof Publication p){
             for(Mentionable m : p.getMentions()){
                 mentionsMap.put(m, mentionsMap.get(m) != null ? mentionsMap.get(m)+1 : 1);
                 int somme = 0;
@@ -45,7 +51,12 @@ public class MediaModule extends Module {
             }
         }
         else{
-
+            Ownership own = (Ownership) arg;
+            sharesHistory.add(own);
+            if(!(owners.contains(own.getOrigin()))){
+                owners.add(own.getOrigin());
+                notifyObservers(own);
+            }
         }
     }
 
@@ -56,4 +67,10 @@ public class MediaModule extends Module {
     public double getSeuil() {
         return seuil;
     }
+
+    public List<Ownership> getSharesHistory(){
+        return sharesHistory;
+    }
+
+
 }
