@@ -3,13 +3,12 @@ package model.media;
 import exceptions.PublicationTypeException;
 import model.actors.Individual;
 import model.actors.Mentionable;
-import model.actors.Owner;
 import model.publication.Interview;
 import model.publication.Publication;
 import model.publication.Report;
 
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
 public class Television extends Media{
     public Television(String name, String scale, String price, boolean disappeared){
@@ -22,7 +21,7 @@ public class Television extends Media{
     }
 
     @Override
-    public void publish(String title, List<Mentionable> mentions, String type) throws PublicationTypeException {
+    public void publish(String title, Set<Mentionable> mentions, String type) throws PublicationTypeException {
         Publication pub;
         if(type.equals("Reportage")){
             pub = new Report(new Date(),title,this,mentions);
@@ -31,7 +30,7 @@ public class Television extends Media{
             pub = new Interview(new Date(),title,this,mentions);
         }
         else{
-            throw new PublicationTypeException("Le type mentionné ("+type+") ne peut pas être publié par une presse écrite !\nTypes autorisés:\n\t- Reportage\n\t- Interview");
+            throw new PublicationTypeException("Le type mentionné ("+type+") ne peut pas être publié par une chaîne télévisée !\nTypes autorisés:\n\t- Reportage\n\t- Interview");
         }
 
         for(Mentionable m : mentions) {
@@ -41,6 +40,7 @@ public class Television extends Media{
         }
 
         this.getPublications().add(pub);
+        setChanged();
         notifyObservers(pub);
 
         for(Mentionable m : mentions) {

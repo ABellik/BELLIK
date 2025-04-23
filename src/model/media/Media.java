@@ -6,10 +6,7 @@ import model.ownership.Appropriable;
 import model.ownership.Ownership;
 import model.publication.Publication;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
+import java.util.*;
 
 public abstract class Media extends Observable implements Mentionable, Appropriable {
     private final String name;
@@ -45,7 +42,7 @@ public abstract class Media extends Observable implements Mentionable, Appropria
         return "Média : "+name+"\n\tEchelle : "+scale+"\n\tPrix : "+price+(disappeared ? "\n\tCe média n'existe plus\n" : "\n");
     }
 
-    public abstract void publish(String title, List<Mentionable> mentions, String type);
+    public abstract void publish(String title, Set<Mentionable> mentions, String type);
 
     public List<Publication> getPublications() {
         return publications;
@@ -77,5 +74,10 @@ public abstract class Media extends Observable implements Mentionable, Appropria
 
     public String getName() {
         return name;
+    }
+
+    public void notification(Object arg){
+        setChanged();
+        notifyObservers(arg);
     }
 }

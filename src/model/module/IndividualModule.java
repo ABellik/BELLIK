@@ -2,6 +2,8 @@ package model.module;
 
 import model.actors.Individual;
 import model.media.Media;
+import model.ownership.Ownership;
+import model.ownership.OwnershipManager;
 import model.publication.Publication;
 
 import java.util.ArrayList;
@@ -23,6 +25,7 @@ public class IndividualModule extends Module {
     private final Individual individual;
 
     public IndividualModule(Individual individual){
+        super();
         this.individual = individual;
     }
 
@@ -31,7 +34,9 @@ public class IndividualModule extends Module {
         Publication p = (Publication) arg;
         mentions.add(p);
         mentionsMap.put(p.getSource(), mentionsMap.get(p.getSource()) != null ? mentionsMap.get(p.getSource())+1 : 1);
-        if(p.getMentions().contains(individual)){
+
+        if (OwnershipManager.ownsMedia(this.individual,p.getSource())) {
+            setChanged();
             notifyObservers(p);
         }
     }

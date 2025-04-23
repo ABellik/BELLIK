@@ -9,7 +9,7 @@ import model.publication.Publication;
 import java.util.*;
 
 public class MediaModule extends Module {
-    private static final double seuil = 0.1;
+    private static final double seuil = 0.2;
     /*
     Chaque instance de ce module est associé à un "Media".
     Ce module doit :
@@ -29,6 +29,7 @@ public class MediaModule extends Module {
     private final Set<Owner> owners = new HashSet<>();
 
     public MediaModule(Media media){
+        super();
         this.media = media;
         sharesHistory.addAll(media.getShares());
         for(Ownership o : media.getShares()){
@@ -41,20 +42,25 @@ public class MediaModule extends Module {
         if (arg instanceof Publication p){
             for(Mentionable m : p.getMentions()){
                 mentionsMap.put(m, mentionsMap.get(m) != null ? mentionsMap.get(m)+1 : 1);
+            }
+            for(Mentionable m2 : p.getMentions()){
                 int somme = 0;
                 for(Integer i: mentionsMap.values()){
                     somme+=i;
                 }
-                if(((double) mentionsMap.get(m) /somme)>seuil){
-                    notifyObservers(m);
+                if(((double) mentionsMap.get(m2) /somme)>seuil){
+                    setChanged();
+                    notifyObservers(m2);
                 }
             }
         }
         else{
             Ownership own = (Ownership) arg;
             sharesHistory.add(own);
+            System.out.println("Dans le MediaModule: "+own.getOrigin());
             if(!(owners.contains(own.getOrigin()))){
                 owners.add(own.getOrigin());
+                setChanged();
                 notifyObservers(own);
             }
         }

@@ -13,7 +13,7 @@ public class Individual extends Owner {
         super(name);
         this.rankChallenges2024 = rankChallenges2024;
         this.billionaireForbes2024 = billionaireForbes2024;
-        this.addObserver(this.getMod());
+        //this.addObserver(this.getMod());
     }
 
     @Override

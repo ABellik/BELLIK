@@ -3,13 +3,12 @@ package model.media;
 import exceptions.PublicationTypeException;
 import model.actors.Individual;
 import model.actors.Mentionable;
-import model.actors.Owner;
 import model.publication.Article;
 import model.publication.Interview;
 import model.publication.Publication;
 
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
 public class PrintMedia extends Media{
     private final String frequency;
@@ -29,7 +28,7 @@ public class PrintMedia extends Media{
     }
 
     @Override
-    public void publish(String title, List<Mentionable> mentions, String type) throws PublicationTypeException {
+    public void publish(String title, Set<Mentionable> mentions, String type) throws PublicationTypeException {
         Publication pub;
         if(type.equals("Article")){
             pub = new Article(new Date(),title,this,mentions);
@@ -48,6 +47,7 @@ public class PrintMedia extends Media{
         }
 
         this.getPublications().add(pub);
+        setChanged();
         notifyObservers(pub);
 
         for(Mentionable m : mentions) {

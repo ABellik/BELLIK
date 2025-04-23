@@ -4,20 +4,18 @@ import model.actors.Mentionable;
 import model.media.Media;
 
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 
 public abstract class Publication{
     private final Date date;
     private final String title;
     private final Media source;
-    private final List<Mentionable> mentions = new ArrayList<>();
+    private final Set<Mentionable> mentions = new HashSet<>();
 
 
 
-    public Publication(Date date, String title, Media source, List<Mentionable> mentions){
+    public Publication(Date date, String title, Media source, Set<Mentionable> mentions){
         this.date   = date;
         this.title  = title;
         this.source = source;
@@ -37,7 +35,7 @@ public abstract class Publication{
         return source;
     }
 
-    public List<Mentionable> getMentions(){
+    public Set<Mentionable> getMentions(){
         return mentions;
     }
 }

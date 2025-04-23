@@ -99,4 +99,47 @@ public abstract class DataRepository {
             }
         }
     }
+
+    public static Mentionable searchMentionable(String name) throws NoSuchElementException{
+        Mentionable m;
+        try {
+            m = searchOrganization(name);
+            return m;
+        }
+        catch(NoSuchElementException e){
+            try {
+                m = searchMedia(name);
+                return m;
+            }
+            catch(NoSuchElementException e2){
+                try{
+                    m = searchIndividual(name);
+                    return m;
+                }
+                catch(NoSuchElementException e3){
+                    throw new NoSuchElementException("Le possédable \""+name+"\" est introuvable");
+                }
+            }
+        }
+    }
+
+    public static Ownership searchOwnership(String ownerName, String propertyName) throws NoSuchElementException{
+        Owner own = DataRepository.searchOwner(ownerName);
+        Appropriable property = DataRepository.searchAppropriable(propertyName);
+        for(Ownership o : ownerships){
+            if(o.getOrigin().equals(own) && o.getProperty().equals(property)){
+                return o;
+            }
+        }
+        throw new NoSuchElementException("La part demandée est introuvable. Il est fort probable que "+ownerName+" ne possède pas "+propertyName);
+    }
+
+    public static Ownership searchOwnership(Owner owner, Appropriable property) throws NoSuchElementException{
+        for(Ownership o : ownerships){
+            if(o.getOrigin().equals(owner) && o.getProperty().equals(property)){
+                return o;
+            }
+        }
+        throw new NoSuchElementException("La part demandée est introuvable. Il est fort probable que "+owner.getName()+" ne possède pas "+property.toString());
+    }
 }
