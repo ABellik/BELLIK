@@ -2,16 +2,16 @@ package main;
 
 
 import data.repository.DataRepository;
+import exceptions.IllegalPercentageException;
 import exceptions.PublicationTypeException;
+import model.actors.Individual;
 import model.actors.Mentionable;
-import model.actors.Owner;
+import model.actors.Organization;
 import model.media.Media;
-import model.ownership.Appropriable;
 import model.ownership.Ownership;
 import model.ownership.OwnershipManager;
-import model.publication.Publication;
+import model.module.Module;
 
-import javax.xml.crypto.Data;
 import java.util.HashSet;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
@@ -43,7 +43,7 @@ public class Main {
 
         while(true) {
             System.out.print("""
-                    Que souhaitez-vous faire :
+                    \nQue souhaitez-vous faire :
                     \t1. Avoir des renseignements\
                     
                     \t2. Simuler une publication\
@@ -60,29 +60,66 @@ public class Main {
 
             if(choix == 1){
                 System.out.print("""
-                    Avoir des renseignements/\n
-                    Que souhaitez-vous faire :
-                    \t1. Afficher les propriétaires\
+                    \nQue souhaitez-vous faire :
+                    \t1. Rechercher une personne\
                     
-                    \t2. Afficher les organisations\
+                    \t2. Rechercher une organisation\
                     
-                    \t3. Afficher les médias\
+                    \t3. Rechercher un média\
+                    
+                    \t4. Afficher l'historique des alertes\
                     
                     \tAutre. Revenir\
                     
-                    Veuillez saisir votre choix :\s""");
+                    \nVeuillez saisir votre choix :\s""");
 
                 choix = scanner.nextInt();
+                scanner.nextLine();
                 if (choix == 1){
-                    System.out.println(DataRepository.getIndividuals());
+                    String name;
+                    System.out.print("Entrez son nom complet : ");
+                    name = scanner.nextLine();
+
+                    try {
+                        Individual individual = DataRepository.searchIndividual(name);
+                        System.out.println(individual);
+                        System.out.println("Liste de ses propriétés : \n"+individual.getOwnerships());
+                    } catch (NoSuchElementException e) {
+                        System.out.println(e.getMessage());
+                    }
+
                 }
                 else if(choix == 2){
-                    System.out.println(DataRepository.getOrganizations());
+                    String name;
+                    System.out.print("Entrez son nom complet : ");
+                    name = scanner.nextLine();
+
+                    try {
+                        Organization organization = DataRepository.searchOrganization(name);
+                        System.out.println(organization);
+                        System.out.println("Liste de ses propriétés : \n"+organization.getOwnerships());
+                        System.out.println("Liste de ses parts : \n"+organization.getShares());
+                    } catch (NoSuchElementException e) {
+                        System.out.println(e.getMessage());
+                    }
                 }
                 else if(choix == 3){
-                    System.out.println(DataRepository.getMedias());
+                    String name;
+                    System.out.print("Entrez son nom complet : ");
+                    name = scanner.nextLine();
+
+                    try {
+                        Media media = DataRepository.searchMedia(name);
+                        System.out.println(media);
+                        System.out.println("Liste de ses parts : \n"+media.getShares());
+                    } catch (NoSuchElementException e) {
+                        System.out.println(e.getMessage());
+                    }
                 }
-                else if(choix == 4) System.exit(0);
+                else if(choix == 4){
+                    System.out.println(Module.getMonitoring().getAlertList());
+                }
+
             }
 
 
@@ -95,7 +132,7 @@ public class Main {
                 Set<Mentionable> mentions = new HashSet<>();
                 System.out.println("Entrez les noms des mentionnés (Personne, Organisation ou Média). Tapez 'fin' pour terminer : ");
 
-                String mentionName = scanner.next();
+                String mentionName = scanner.nextLine();
                 while (!(mentionName.equals("fin"))) {
                     // On recherche un Mentionable (Personne, Organisation, Media...) par nom
                     try {
@@ -106,12 +143,11 @@ public class Main {
                         System.out.println("Aucun mentionable trouvé avec le nom \"" + mentionName + "\".");
                     }
 
-                    mentionName = scanner.next();
+                    mentionName = scanner.nextLine();
                 }
 
                 String mediaName;
                 Media m;
-                scanner.nextLine();
                 while(true) {
                     System.out.print("Entrez le nom du média qui publie : ");
                     mediaName = scanner.nextLine();
@@ -170,16 +206,16 @@ public class Main {
                     Ownership ownership = DataRepository.searchOwnership(sellerName, propertyName);
                     OwnershipManager.buyOutOwnership(ownership,DataRepository.searchOwner(buyerName),percentage);
                     System.out.println("Rachat de part réalisé avec succès !\n");
-                } catch (NoSuchElementException e) {
+                } catch (NoSuchElementException | IllegalPercentageException e) {
                     System.out.println("Rachat de part annulé : " + e.getMessage());
                 }
-
-                //Bug si un nouveau propriétaire ayant acheté, achète une nouvelle part
             }
 
             else if(choix == 4) System.exit(0);
 
             else System.out.println("Choix invalide !");
         }
+
+        //À AJOUTER, Si propriétaire contrôle et ne possède pas, alors annuler rachat
     }
 }

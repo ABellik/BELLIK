@@ -17,4 +17,7 @@ public abstract class Module extends Observable implements Observer {
         super.addObserver(o);
     }
 
+    public static Monitoring getMonitoring() {
+        return monitoring;
+    }
 }

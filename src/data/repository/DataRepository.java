@@ -131,7 +131,7 @@ public abstract class DataRepository {
                 return o;
             }
         }
-        throw new NoSuchElementException("La part demandée est introuvable. Il est fort probable que "+ownerName+" ne possède pas "+propertyName);
+        throw new NoSuchElementException("La part demandée est introuvable. Il est fort probable que "+ownerName+" ne possède pas\n "+propertyName);
     }
 
     public static Ownership searchOwnership(Owner owner, Appropriable property) throws NoSuchElementException{
@@ -140,6 +140,6 @@ public abstract class DataRepository {
                 return o;
             }
         }
-        throw new NoSuchElementException("La part demandée est introuvable. Il est fort probable que "+owner.getName()+" ne possède pas "+property.toString());
+        throw new NoSuchElementException("La part demandée est introuvable. Il est fort probable que "+owner.getName()+" ne possède pas :\n "+property.toString());
     }
 }

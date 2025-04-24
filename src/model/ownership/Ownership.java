@@ -1,5 +1,6 @@
 package model.ownership;
 
+import data.repository.DataRepository;
 import model.actors.Owner;
 
 public class Ownership {
@@ -13,11 +14,12 @@ public class Ownership {
         this.origin = origin;
         this.property = property;
         this.percentage = percentage;
+        DataRepository.getOwnerships().add(this);
     }
 
     @Override
     public String toString(){
-        return "Possession N°"+Integer.toString(id)+"\n\tPropriétaire :\n\t"+origin.toString()+"\n\tPossession :\n\t"+property.toString()+"\n\tPourcentage: "+Double.toString(percentage)+"\n";
+        return "Possession N°"+id+"\n\tPropriétaire :\n\t"+origin.toString()+"\n\tPossession :\n\t"+property.toString()+"\n\tPourcentage: "+percentage+"\n";
     }
 
     public int getId() {

@@ -15,7 +15,7 @@ public class OwnershipManager {
             throw new IllegalPercentageException("Le pourcentage d'achat est plus élevé que celui de la part !");
         }
         else if (o.getPercentage() == percentage) {
-            System.out.println("Je suis là");
+            System.out.println("Je suis là 3");
             if(OwnershipManager.ownsPropertyDirectly(buyer,o.getProperty())){
                 DataRepository.searchOwnership(buyer,o.getProperty()).setPercentage(DataRepository.searchOwnership(buyer,o.getProperty()).getPercentage()+percentage);
                 o.getOrigin().removeOwnership(o);
@@ -33,7 +33,11 @@ public class OwnershipManager {
             System.out.println("Je suis là");
             o.setPercentage(o.getPercentage() - percentage);
             if(OwnershipManager.ownsPropertyDirectly(buyer,o.getProperty())){
-                DataRepository.searchOwnership(buyer,o.getProperty()).setPercentage(DataRepository.searchOwnership(buyer,o.getProperty()).getPercentage()+percentage);
+                System.out.println("Je suis là 2");
+                System.out.println(buyer.getOwnerships()+"\n\n\n"+o.getProperty().getShares());
+
+                Ownership ownership = DataRepository.searchOwnership(buyer,o.getProperty());
+                ownership.setPercentage(ownership.getPercentage()+percentage);
             }
             else {
                 Ownership o2 = new Ownership(1000, buyer, o.getProperty(), percentage);
