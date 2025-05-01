@@ -35,7 +35,7 @@ public class OwnershipDataLoader extends DataLoader<Ownership>{
                     int p1 = Integer.parseInt(colonnes[0]);
                     String p2 = colonnes[1];
                     String p3 = colonnes[2];
-                    double p4 = (colonnes.length > 3 && !Objects.equals(colonnes[3], "")) ? Double.parseDouble(colonnes[3].substring(0,colonnes[3].length() - 1)) : 0.0;
+                    double p4 = (colonnes.length > 3 && Objects.equals(p3, "égal à")) ? Double.parseDouble(colonnes[3].substring(0,colonnes[3].length() - 1)) : 0.0;
                     String p5 = colonnes[4];
                     try {
                         Ownership o = new Ownership(p1, DataRepository.searchOwner(p2), DataRepository.searchAppropriable(p5), p4);
