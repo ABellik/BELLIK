@@ -2,7 +2,7 @@ package main;
 
 
 import data.repository.DataRepository;
-import exceptions.IllegalPercentageException;
+
 import exceptions.PublicationTypeException;
 import model.actors.Individual;
 import model.actors.Mentionable;

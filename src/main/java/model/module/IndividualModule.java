@@ -2,7 +2,6 @@ package model.module;
 
 import model.actors.Individual;
 import model.media.Media;
-import model.ownership.Ownership;
 import model.ownership.OwnershipManager;
 import model.publication.Publication;
 

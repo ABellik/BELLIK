@@ -3,7 +3,6 @@ package data.loader;
 import data.repository.DataRepository;
 import model.ownership.Ownership;
 
-import javax.xml.crypto.Data;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;

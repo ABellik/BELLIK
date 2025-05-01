@@ -1,12 +1,10 @@
 package model.actors;
 
-import model.module.IndividualModule;
 import model.ownership.Ownership;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
-import java.util.Observer;
 
 abstract public class Owner extends Observable implements Mentionable {
     private final String name;
