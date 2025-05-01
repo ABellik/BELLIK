@@ -19,7 +19,7 @@ public class Ownership {
 
     @Override
     public String toString(){
-        return "Possession N°"+id+"\n\tPropriétaire :\n\t"+origin.toString()+"\n\tPossession :\n\t"+property.toString()+"\n\tPourcentage: "+percentage+"\n";
+        return "Possession N°"+id+"\n\tPropriétaire :\n\t"+origin.toString()+"\n\tPossession :\n\t"+property.toString()+"\n\tPourcentage: "+(percentage != 0 ? percentage : "contrôle")+"\n";
     }
 
     public int getId() {

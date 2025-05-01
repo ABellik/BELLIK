@@ -12,10 +12,7 @@ import model.ownership.Ownership;
 import model.ownership.OwnershipManager;
 import model.module.Module;
 
-import java.util.HashSet;
-import java.util.NoSuchElementException;
-import java.util.Scanner;
-import java.util.Set;
+import java.util.*;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
@@ -54,9 +51,15 @@ public class Main {
                     
                     \nVeuillez saisir votre choix :\s""");
 
-            choix = scanner.nextInt();
-            System.out.println("Ok ! Vous avez choisi " + choix);
-
+            try {
+                choix = scanner.nextInt();
+                System.out.println("Ok ! Vous avez choisi " + choix);
+            }
+            catch (InputMismatchException e){
+                scanner.nextLine();
+                System.out.println("Entrée invalide");
+                continue;
+            }
 
             if(choix == 1){
                 System.out.print("""
@@ -69,11 +72,16 @@ public class Main {
                     
                     \t4. Afficher l'historique des alertes\
                     
-                    \tAutre. Revenir\
-                    
                     \nVeuillez saisir votre choix :\s""");
 
-                choix = scanner.nextInt();
+                try {
+                    choix = scanner.nextInt();
+                }
+                catch (InputMismatchException e){
+                    System.out.println("Entrée invalide");
+                    scanner.nextLine();
+                    continue;
+                }
                 scanner.nextLine();
                 if (choix == 1){
                     String name;
@@ -199,14 +207,20 @@ public class Main {
                 propertyName = scanner.nextLine();
 
                 double percentage;
-                System.out.println("Quel pourcentage de "+propertyName+" est racheté par "+buyerName+" ?");
-                percentage = scanner.nextDouble();
-
+                System.out.print("Quel pourcentage de "+propertyName+" est racheté par "+buyerName+" : ");
+                try {
+                    percentage = scanner.nextDouble();
+                }
+                catch (InputMismatchException e){
+                    System.out.println("Pourcentage invalide");
+                    scanner.nextLine();
+                    continue;
+                }
                 try {
                     Ownership ownership = DataRepository.searchOwnership(sellerName, propertyName);
                     OwnershipManager.buyOutOwnership(ownership,DataRepository.searchOwner(buyerName),percentage);
                     System.out.println("Rachat de part réalisé avec succès !\n");
-                } catch (NoSuchElementException | IllegalPercentageException e) {
+                } catch (NoSuchElementException | IllegalArgumentException e) {
                     System.out.println("Rachat de part annulé : " + e.getMessage());
                 }
             }

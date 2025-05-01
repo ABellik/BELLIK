@@ -11,7 +11,10 @@ import java.util.Set;
 
 public class OwnershipManager {
     public static void buyOutOwnership(Ownership o, Owner buyer, double percentage) throws IllegalPercentageException {
-        if (o.getPercentage() < percentage) {
+        if(o.getPercentage() == 0){
+            throw new IllegalArgumentException(o.getOrigin().getName()+" ne peux pas vendre cette part car il la contrôle !");
+        }
+        else if (o.getPercentage() < percentage) {
             throw new IllegalPercentageException("Le pourcentage d'achat est plus élevé que celui de la part !");
         }
         else if (o.getPercentage() == percentage) {
