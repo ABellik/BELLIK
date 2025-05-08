@@ -1,8 +1,5 @@
 package application;
 
-import data.loader.DataLoader;
-import data.loader.IndividualDataLoader;
-import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -18,12 +15,9 @@ import model.actors.Individual;
 import model.actors.Organization;
 import model.media.Media;
 
-import javax.xml.crypto.Data;
-
 public class Controller {
 
-    private final ObservableList<String> entityElements = FXCollections.observableArrayList("Personne", "Organisation", "Média");
-    private ObservableList<String> nameElements = FXCollections.observableArrayList(new ArrayList<>());
+    private final ObservableList<String> entityElements = FXCollections.observableArrayList("...","Personne", "Organisation", "Média");
 
     @FXML
     private Button exitButton;
@@ -65,25 +59,71 @@ public class Controller {
             stage.close(); // Ferme la fenêtre
         });
 
-        nameElements = FXCollections.observableArrayList(getIndividualNames());
-
-
         entityComboBox.setItems(entityElements);
 
-        nameComboBox.setItems(nameElements);
+        nameComboBox.setValue("...");
+        nameComboBox.setDisable(true);
 
         entityComboBox.setOnAction(event -> {
-            String newVal = entityComboBox.getValue();
-            if (newVal.equals("Personne")) {
-                nameElements = FXCollections.observableArrayList(getIndividualNames());
+            String entityComboBoxValue = entityComboBox.getValue();
+            ObservableList<String> names;
+            switch (entityComboBoxValue) {
+                case "Personne" -> {
+                    nameComboBox.setDisable(false);
+                    names = getIndividualNames();
+                }
+                case "Organisation" -> {
+                    nameComboBox.setDisable(false);
+                    names = getOrganizationNames();
+                }
+                case "Média" -> {
+                    nameComboBox.setDisable(false);
+                    names = getMediaNames();
+                }
+                default -> {
+                    nameComboBox.setDisable(true);
+                    names = FXCollections.observableArrayList(new ArrayList<>());
+                }
             }
-            else if (newVal.equals("Organisation")) {
-                nameElements = FXCollections.observableArrayList(getOrganizationNames());
+            names.addFirst("...");
+            nameComboBox.setValue(names.getFirst());
+            informationsText.clear();
+            ownershipsText.clear();
+            nameComboBox.setItems(names);
+        });
+
+        nameComboBox.setOnAction(event -> {
+            String nameComboBoxValue = nameComboBox.getValue();
+            String entityComboBoxValue = entityComboBox.getValue();
+
+            if (nameComboBoxValue == null || nameComboBoxValue.equals("...")) {
+                informationsText.clear();
+                ownershipsText.clear();
+                return; // on quitte la méthode ou le bloc d'action ici
             }
-            else if (newVal.equals("Média")) {
-                nameElements = FXCollections.observableArrayList(getMediaNames());
+
+            switch (entityComboBoxValue) {
+                case "Personne" -> {
+                    Individual individual = DataRepository.searchIndividual(nameComboBoxValue);
+                    informationsText.setText(individual.toString());
+                    ownershipsText.setText("Liste de ses propriétés : \n" + individual.getOwnerships());
+                }
+                case "Organisation" -> {
+                    Organization organization = DataRepository.searchOrganization(nameComboBoxValue);
+                    informationsText.setText(organization.toString());
+                    ownershipsText.setText("Liste de ses propriétés : \n" + organization.getOwnerships());
+                }
+                case "Média" -> {
+                    Media media = DataRepository.searchMedia(nameComboBoxValue);
+                    informationsText.setText(media.toString());
+                    ownershipsText.setText("Liste de ses parts : \n" + media.getShares());
+                }
+                default -> {
+                    informationsText.clear();
+                    ownershipsText.clear();
+                }
             }
-            nameComboBox.setItems(nameElements);
+
         });
     }
 

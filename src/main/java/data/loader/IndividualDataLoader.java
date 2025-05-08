@@ -2,9 +2,7 @@ package data.loader;
 
 import model.actors.Individual;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,11 +10,14 @@ import java.util.Objects;
 
 public class IndividualDataLoader extends DataLoader<Individual>{
     public List<Individual> load(){
-        String urlFichier = "https://raw.githubusercontent.com/mdiplo/Medias_francais/master/personnes.tsv";
-
+        //String urlFichier = "https://raw.githubusercontent.com/mdiplo/Medias_francais/master/personnes.tsv";
+        String cheminFichier = "/files/personnes.tsv";
         List<Individual> individuals = new ArrayList<>();
 
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(new URL(urlFichier).openStream()))) {
+        try (InputStream is = getClass().getResourceAsStream(cheminFichier);
+             BufferedReader br = new BufferedReader(new InputStreamReader(Objects.requireNonNull(is)))) {
+        //try (BufferedReader br = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/fichiers/personnes.tsv")))) {
+
             String ligne = br.readLine();
 
             while ((ligne = br.readLine()) != null) {

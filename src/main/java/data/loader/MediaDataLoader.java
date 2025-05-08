@@ -4,6 +4,7 @@ import model.media.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
@@ -15,10 +16,12 @@ public class MediaDataLoader extends DataLoader<Media>{
     public List<Media> load(){
 
         String urlFichier = "https://raw.githubusercontent.com/mdiplo/Medias_francais/master/medias.tsv";
+        String cheminFichier = "/files/medias.tsv";
 
         List<Media> medias = new ArrayList<>();
 
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(new URL(urlFichier).openStream()))) {
+        try (InputStream is = getClass().getResourceAsStream(cheminFichier);
+             BufferedReader br = new BufferedReader(new InputStreamReader(Objects.requireNonNull(is)))) {
             String ligne = br.readLine();
 
             while ((ligne = br.readLine()) != null) {

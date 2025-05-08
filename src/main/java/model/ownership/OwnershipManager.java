@@ -43,7 +43,7 @@ public class OwnershipManager {
                 ownership.setPercentage(ownership.getPercentage()+percentage);
             }
             else {
-                Ownership o2 = new Ownership(1000, buyer, o.getProperty(), percentage);
+                Ownership o2 = new Ownership(buyer, o.getProperty(), percentage);
                 buyer.addOwnership(o2);
                 o.getProperty().addShare(o2);
                 if (o.getProperty() instanceof Media property) {

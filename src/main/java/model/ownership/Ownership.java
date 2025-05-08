@@ -4,13 +4,14 @@ import data.repository.DataRepository;
 import model.actors.Owner;
 
 public class Ownership {
+    private static int last_id = 0;
     private final int id;
     private Owner origin;
     private final Appropriable property;
     private double percentage;
 
-    public Ownership(int id, Owner origin, Appropriable property, double percentage) {
-        this.id = id;
+    public Ownership(Owner origin, Appropriable property, double percentage) {
+        this.id = last_id++;
         this.origin = origin;
         this.property = property;
         this.percentage = percentage;

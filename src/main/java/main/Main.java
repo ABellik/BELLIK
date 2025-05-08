@@ -229,7 +229,5 @@ public class Main {
 
             else System.out.println("Choix invalide !");
         }
-
-        //À AJOUTER, Si propriétaire contrôle et ne possède pas, alors annuler rachat
     }
 }

@@ -4,6 +4,7 @@ import model.actors.Organization;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
@@ -15,11 +16,15 @@ public class OrganizationDataLoader extends DataLoader<Organization> {
     public List<Organization> load(){
 
         String urlFichier = "https://raw.githubusercontent.com/mdiplo/Medias_francais/master/organisations.tsv";
+        String cheminFichier = "/files/organisations.tsv";
 
         List<Organization> organizations = new ArrayList<>();
 
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(new URL(urlFichier).openStream()))) {
+        try (InputStream is = getClass().getResourceAsStream(cheminFichier);
+             BufferedReader br = new BufferedReader(new InputStreamReader(Objects.requireNonNull(is)))) {
+
             String ligne = br.readLine();
+
 
             while ((ligne = br.readLine()) != null) {
                 // Les valeurs sont séparées par une tabulation (\t)

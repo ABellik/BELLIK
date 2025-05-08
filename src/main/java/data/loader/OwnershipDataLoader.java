@@ -5,6 +5,7 @@ import model.ownership.Ownership;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
@@ -22,23 +23,31 @@ public class OwnershipDataLoader extends DataLoader<Ownership>{
                 "https://raw.githubusercontent.com/mdiplo/Medias_francais/master/organisation-media.tsv"
         };
 
+        String[] cheminsFichiers = {
+                "/files/personne-media.tsv",
+                "/files/personne-organisation.tsv",
+                "/files/organisation-organisation.tsv",
+                "/files/organisation-media.tsv"
+        };
+
         List<Ownership> ownerships = new ArrayList<>();
 
-        for (String s : urlFichiers) {
-            try (BufferedReader br = new BufferedReader(new InputStreamReader(new URL(s).openStream()))) {
+        for (String s : cheminsFichiers) {
+            try (InputStream is = getClass().getResourceAsStream(s);
+                 BufferedReader br = new BufferedReader(new InputStreamReader(Objects.requireNonNull(is)))) {
                 String ligne = br.readLine();
 
                 while ((ligne = br.readLine()) != null) {
                     // Les valeurs sont séparées par une tabulation (\t)
                     String[] colonnes = ligne.split("\t");
 
-                    int p1 = Integer.parseInt(colonnes[0]);
+                    //int p1 = Integer.parseInt(colonnes[0]);
                     String p2 = colonnes[1];
                     String p3 = colonnes[2];
                     double p4 = (colonnes.length > 3 && Objects.equals(p3, "égal à")) ? Double.parseDouble(colonnes[3].substring(0,colonnes[3].length() - 1)) : 0.0;
                     String p5 = colonnes[4];
                     try {
-                        Ownership o = new Ownership(p1, DataRepository.searchOwner(p2), DataRepository.searchAppropriable(p5), p4);
+                        Ownership o = new Ownership(DataRepository.searchOwner(p2), DataRepository.searchAppropriable(p5), p4);
                         ownerships.add(o);
                         DataRepository.searchOwner(p2).addOwnership(o);
                         DataRepository.searchAppropriable(p5).addShare(o);
