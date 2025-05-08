@@ -6,4 +6,5 @@ public interface Appropriable {
     public void addShare(Ownership o);
     public void removeShare(Ownership o);
     public List<Ownership> getShares();
+    public String getName();
 }
