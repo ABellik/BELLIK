@@ -19,6 +19,7 @@ public class Controller {
 
     private final ObservableList<String> entityElements = FXCollections.observableArrayList("...","Personne", "Organisation", "Média");
     private final ObservableList<String> publicationTypes = FXCollections.observableArrayList("...","Article", "Reportage", "Interview");
+    private ObservableList<String> items;
 
     @FXML
     private Button exitButton;
@@ -72,6 +73,8 @@ public class Controller {
         });
 
         /**********************************************RENSEIGNEMENTS***********************************************/
+        items = FXCollections.observableArrayList();
+        mentionsListView.setItems(items);
         entityComboBox.setItems(entityElements);
 
         nameComboBox.setValue("...");
@@ -98,6 +101,7 @@ public class Controller {
                     names = FXCollections.observableArrayList(new ArrayList<>());
                 }
             }
+            //names.add(0,"...");
             names.addFirst("...");
             nameComboBox.setValue(names.getFirst());
             informationsText.clear();
@@ -181,6 +185,17 @@ public class Controller {
 
             media.publish(title,mentions,publicationType);
             /*Ajouter les messages d'information (Publication réussie et alerte)*/
+        });
+
+        addMentionsButton.setOnAction(event -> {
+            items.add("OUI");
+        });
+
+        removeMentionsButton.setOnAction(event -> {
+            String selectedItem = mentionsListView.getSelectionModel().getSelectedItem();
+            if (selectedItem != null) {
+                mentionsListView.getItems().remove(selectedItem);
+            }
         });
 
     }
