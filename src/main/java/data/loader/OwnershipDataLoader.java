@@ -16,12 +16,12 @@ import java.util.Objects;
 public class OwnershipDataLoader extends DataLoader<Ownership>{
     public List<Ownership> load() {
 
-        String[] urlFichiers = {
+        /*String[] urlFichiers = {
                 "https://raw.githubusercontent.com/mdiplo/Medias_francais/master/personne-media.tsv",
                 "https://raw.githubusercontent.com/mdiplo/Medias_francais/master/personne-organisation.tsv",
                 "https://raw.githubusercontent.com/mdiplo/Medias_francais/master/organisation-organisation.tsv",
                 "https://raw.githubusercontent.com/mdiplo/Medias_francais/master/organisation-media.tsv"
-        };
+        };*/
 
         String[] cheminsFichiers = {
                 "/files/personne-media.tsv",
@@ -52,7 +52,7 @@ public class OwnershipDataLoader extends DataLoader<Ownership>{
                         DataRepository.searchOwner(p2).addOwnership(o);
                         DataRepository.searchAppropriable(p5).addShare(o);
                     } catch (NoSuchElementException e) {
-                        System.out.println("Warning ! "+p2+" ou "+p5+" semblent être inconnu");
+                        System.err.println("⚠\uFE0F Warning ! "+p2+" ou "+p5+" semblent être inconnu");
                     }
                 }
 

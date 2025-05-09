@@ -25,7 +25,7 @@ public class Main {
         try {
             Thread.sleep(1000); // Pause de 2000 millisecondes (2 secondes)
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            Thread.currentThread().interrupt();
         }
         DataRepository.initialize();
         System.out.println("Données chargées avec succès !");
@@ -176,7 +176,7 @@ public class Main {
 
                 System.out.println("En cours de publication...");
                 try {
-                    Thread.sleep(1000); // Pause de 2000 millisecondes (2 secondes)
+                    Thread.sleep(1000); // Pause de 1000 millisecondes (1 seconde)
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

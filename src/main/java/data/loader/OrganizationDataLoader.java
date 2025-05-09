@@ -15,7 +15,7 @@ public class OrganizationDataLoader extends DataLoader<Organization> {
     @Override
     public List<Organization> load(){
 
-        String urlFichier = "https://raw.githubusercontent.com/mdiplo/Medias_francais/master/organisations.tsv";
+        //String urlFichier = "https://raw.githubusercontent.com/mdiplo/Medias_francais/master/organisations.tsv";
         String cheminFichier = "/files/organisations.tsv";
 
         List<Organization> organizations = new ArrayList<>();

@@ -15,7 +15,7 @@ public class MediaDataLoader extends DataLoader<Media>{
     @Override
     public List<Media> load(){
 
-        String urlFichier = "https://raw.githubusercontent.com/mdiplo/Medias_francais/master/medias.tsv";
+        //String urlFichier = "https://raw.githubusercontent.com/mdiplo/Medias_francais/master/medias.tsv";
         String cheminFichier = "/files/medias.tsv";
 
         List<Media> medias = new ArrayList<>();
@@ -60,7 +60,7 @@ public class MediaDataLoader extends DataLoader<Media>{
                     String p5 = (colonnes.length > 4 && !Objects.equals(colonnes[4], "")) ? colonnes[4] : "";
                     boolean p6 = Boolean.parseBoolean((colonnes.length > 5 && !Objects.equals(colonnes[5], "")) ? colonnes[5] : "");
                     medias.add(new OtherMedia(p1,p4,p5,p6));*/
-                    System.out.println(colonnes[0]+" n'a pas été retenu car n'est ni une Presse, ni une télévision, ni une radio");
+                    System.err.println("⚠\uFE0F " + colonnes[0]+" n'a pas été retenu car n'est ni une Presse, ni une télévision, ni une radio");
                 }
             }
 

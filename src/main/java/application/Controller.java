@@ -10,6 +10,7 @@ import java.util.*;
 
 import data.repository.DataRepository;
 import model.actors.Individual;
+import model.actors.Mentionable;
 import model.actors.Organization;
 import model.media.Media;
 import model.ownership.Ownership;
@@ -165,7 +166,22 @@ public class Controller {
         comboBoxMedia.setValue(names.getFirst());
         comboBoxMedia.setItems(names);
 
+        publishButton.setOnAction(event -> {
+            String title = textFieldTitle.getText();
 
+            Media media = DataRepository.searchMedia(comboBoxMedia.getValue());
+
+            ObservableList<String> mentionsList = mentionsListView.getItems();
+            Set<Mentionable> mentions = new HashSet<>();
+            for(String s : mentionsList){
+                mentions.add(DataRepository.searchMentionable(s));
+            }
+
+            String publicationType = comboBoxPublicationType.getValue();
+
+            media.publish(title,mentions,publicationType);
+            /*Ajouter les messages d'information (Publication réussie et alerte)*/
+        });
 
     }
 
