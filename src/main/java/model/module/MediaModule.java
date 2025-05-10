@@ -58,7 +58,6 @@ public class MediaModule extends Module {
         else{
             Ownership own = (Ownership) arg;
             sharesHistory.add(own);
-            System.out.println("Dans le MediaModule: "+own.getOrigin());
             if(!(owners.contains(own.getOrigin()))){
                 owners.add(own.getOrigin());
                 setChanged();

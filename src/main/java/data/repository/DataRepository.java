@@ -49,6 +49,13 @@ public abstract class DataRepository {
         return mentionables;
     }
 
+    public static List<Owner> getOwners() {
+        List<Owner> owners = new ArrayList<>();
+        owners.addAll(getIndividuals());
+        owners.addAll(getOrganizations());
+        return owners;
+    }
+
     public static List<Ownership> getOwnerships(){
         return ownerships;
     }

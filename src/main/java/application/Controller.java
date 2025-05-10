@@ -11,17 +11,26 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.beans.binding.Bindings;
 
+import java.text.ParseException;
 import java.util.*;
+import java.util.function.UnaryOperator;
 
 import data.repository.DataRepository;
+import javafx.util.StringConverter;
+import javafx.util.converter.NumberStringConverter;
 import model.actors.Individual;
 import model.actors.Mentionable;
 import model.actors.Organization;
+import model.actors.Owner;
 import model.media.Media;
 import model.media.PrintMedia;
 import model.media.Radio;
 import model.media.Television;
+import model.module.Module;
+import model.monitoring.Monitoring;
+import model.ownership.Appropriable;
 import model.ownership.Ownership;
+import model.ownership.OwnershipManager;
 
 public class Controller {
 
@@ -64,7 +73,24 @@ public class Controller {
     private Button publishButton;
 
     //Composants du troisième onglet
+    @FXML
+    private ComboBox<String> comboBoxSeller;
 
+    @FXML
+    private ComboBox<String> comboBoxBuyer;
+
+    @FXML
+    private ComboBox<String> comboBoxOwnerships;
+
+    @FXML
+    private Spinner<Double> spinnerPercentage;
+
+    @FXML
+    private Button buyoutButton;
+
+    //Composants du quatrième onglet
+    @FXML
+    private ListView<String> listViewAlerts;
 
 
     @FXML
@@ -244,6 +270,7 @@ public class Controller {
             String publicationType = comboBoxPublicationType.getValue();
 
             media.publish(title,mentions,publicationType);
+            listViewAlerts.setItems(FXCollections.observableArrayList(Module.getMonitoring().getAlertList()));
             showInformationAlert("Publication réalisée avec succès !");
         });
 
@@ -273,10 +300,118 @@ public class Controller {
         );
 
         /**********************************************RACHAT DE PARTS***********************************************/
+        comboBoxOwnerships.setDisable(true);
+        spinnerPercentage.setDisable(true);
+
+        SpinnerValueFactory.DoubleSpinnerValueFactory valueFactory = new SpinnerValueFactory.DoubleSpinnerValueFactory(0.0, 100.0, 0.0, 0.5);
+        spinnerPercentage.setValueFactory(valueFactory);
+
+        StringConverter<Double> converter = new StringConverter<>() {
+            @Override
+            public String toString(Double value) {
+                if (value == null) return "";
+                return String.format("%.2f", value).replace('.', ',');
+            }
+
+            @Override
+            public Double fromString(String text) {
+                if (text == null || text.isEmpty()) return 0.0;
+                // Le point est déjà interdit, donc on peut remplacer par sécurité
+                return Double.parseDouble(text.replace(',', '.'));
+            }
+        };
+
+
+        UnaryOperator<TextFormatter.Change> filter = change -> {
+            String newText = change.getControlNewText();
+            // Autorise seulement les virgules comme séparateur décimal
+            return newText.matches("\\d{1,3}(,\\d{0,2})?") ? change : null;
+        };
+
+
+        TextFormatter<Double> textFormatter = new TextFormatter<>(converter, 0.0, filter);
+        spinnerPercentage.getEditor().setTextFormatter(textFormatter);
+
+        textFormatter.valueProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal != null && newVal >= 0 && newVal <= 100) {
+                spinnerPercentage.getValueFactory().setValue(newVal);
+            }
+        });
 
 
 
 
+        ObservableList<String> owners = getOwnersNames();
+        owners.addFirst("...");
+        owners.sort(null);
+        comboBoxSeller.setValue(owners.getFirst());
+        comboBoxSeller.setItems(owners);
+        comboBoxBuyer.setValue(owners.getFirst());
+        comboBoxBuyer.setItems(owners);
+
+        comboBoxSeller.setOnAction(event -> {
+            String selected = comboBoxSeller.getSelectionModel().getSelectedItem();
+            if(selected != null && !selected.equals("...")){
+                comboBoxOwnerships.setDisable(false);
+                Owner o = DataRepository.searchOwner(selected);
+                ObservableList<String> ownershipsNames = getOwnershipsNames(o);
+                ownershipsNames.addFirst("...");
+
+                comboBoxOwnerships.setItems(ownershipsNames);
+                comboBoxOwnerships.setValue(comboBoxOwnerships.getItems().getFirst());
+            }
+            else{
+                comboBoxOwnerships.setDisable(true);
+                comboBoxOwnerships.setValue(comboBoxOwnerships.getItems().getFirst());
+            }
+        });
+
+        comboBoxOwnerships.setOnAction(event -> {
+            String selected = comboBoxOwnerships.getSelectionModel().getSelectedItem();
+            if(selected != null && !selected.equals("...")){
+                spinnerPercentage.setDisable(false);
+                Owner o = DataRepository.searchOwner(comboBoxSeller.getSelectionModel().getSelectedItem());
+                Appropriable a = DataRepository.searchAppropriable(comboBoxOwnerships.getSelectionModel().getSelectedItem());
+                Ownership ownership = DataRepository.searchOwnership(o,a);
+                double percentage = ownership.getPercentage();
+                if(percentage == 0.0){
+                    spinnerPercentage.setDisable(true);
+                    spinnerPercentage.setPromptText("Propriété impossible à racheter");
+                }
+                else{
+                    spinnerPercentage.setEditable(true);
+                    valueFactory.setMax(percentage);
+                    valueFactory.setValue(percentage);
+                }
+            }
+            else{
+                spinnerPercentage.setDisable(true);
+            }
+        });
+
+        buyoutButton.setOnAction(event -> {
+            Owner seller = DataRepository.searchOwner(comboBoxSeller.getValue());
+
+            Owner buyer = DataRepository.searchOwner(comboBoxBuyer.getValue());
+
+            Appropriable property = DataRepository.searchAppropriable(comboBoxOwnerships.getValue());
+
+            Ownership o = DataRepository.searchOwnership(seller,property);
+
+            double percentage = valueFactory.getValue();
+
+            OwnershipManager.buyOutOwnership(o,buyer,percentage);
+            comboBoxSeller.setValue(comboBoxSeller.getItems().getFirst());
+            comboBoxBuyer.setValue(comboBoxSeller.getItems().getFirst());
+            valueFactory.setValue(0.0);
+            spinnerPercentage.setDisable(true);
+            listViewAlerts.setItems(FXCollections.observableArrayList(Module.getMonitoring().getAlertList()));
+            showInformationAlert("Rachat de part réalisé avec succès !");
+
+        });
+
+        /**********************************************HISTORIQUE DES ALERTES***********************************************/
+        listViewAlerts.setItems(FXCollections.observableArrayList(Module.getMonitoring().getAlertList()));
 
 
     }
@@ -317,6 +452,24 @@ public class Controller {
         return FXCollections.observableArrayList(names);
     }
 
+    public ObservableList<String> getOwnersNames(){
+        ArrayList<String> names = new ArrayList<>();
+        List<Owner> ownerList = DataRepository.getOwners();
+        for(Owner i : ownerList ){
+            names.add(i.getName());
+        }
+        return FXCollections.observableArrayList(names);
+    }
+
+    public ObservableList<String> getOwnershipsNames(Owner o){
+        ArrayList<String> names = new ArrayList<>();
+        List<Ownership> ownerships = o.getOwnerships();
+        for(Ownership i : ownerships ){
+            names.add(i.getProperty().getName());
+        }
+        return FXCollections.observableArrayList(names);
+    }
+
     public static void showInformationAlert(String message) {
         Alert alert = new Alert(AlertType.INFORMATION);
         alert.setTitle("Publication validée");
@@ -328,6 +481,14 @@ public class Controller {
     public static void showWarningAlert(String message) {
         Alert alert = new Alert(AlertType.WARNING);
         alert.setTitle("Alerte de la vigie");
+        alert.setHeaderText(null); // ou mets un en-tête si tu veux
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+    public static void showErrorAlert(String message) {
+        Alert alert = new Alert(AlertType.ERROR);
+        alert.setTitle("Erreur");
         alert.setHeaderText(null); // ou mets un en-tête si tu veux
         alert.setContentText(message);
         alert.showAndWait();

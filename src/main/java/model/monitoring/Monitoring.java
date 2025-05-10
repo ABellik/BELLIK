@@ -30,21 +30,21 @@ public class Monitoring implements Observer {
             Publication p = (Publication) arg;
             String alert = "\n------------------------  \u001B[1mALERTE !\u001B[0m  ------------------------\n"+im.getIndividual().getName()+" a été mentionné par "+p.getSource().getName()+" qu'il possède !"+"\nLe titre de la publication concernée : "+p.getTitle()+"\n";
             publishAlert(alert);
-            alertList.add(alert);
+            alertList.add(alert.substring(70));
         }
         else{
             MediaModule mm = (MediaModule) o;
             if(arg instanceof Mentionable m){
                 String alert = "\n------------------------  \u001B[1mALERTE !\u001B[0m  ------------------------\n"+m.getName()+" a été mentionné trop de fois par "+mm.getMedia().getName()+"!";
                 publishAlert(alert);
-                alertList.add(alert);
+                alertList.add(alert.substring(70));
 
             }
             else{
                 Ownership own = (Ownership) arg;
                 String alert = "\n------------------------  \u001B[1mALERTE !\u001B[0m  ------------------------\nUne part de "+mm.getMedia().getName()+" a été racheté par "+own.getOrigin().getName()+" qui est un nouveau propriétaire !";
                 publishAlert(alert);
-                alertList.add(alert);
+                alertList.add(alert.substring(70));
             }
         }
     }

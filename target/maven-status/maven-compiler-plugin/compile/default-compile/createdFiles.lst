@@ -1,6 +1,7 @@
 model\actors\Mentionable.class
 exceptions\MediaTypeException.class
 model\module\Module.class
+application\Controller$1.class
 model\module\IndividualModule.class
 data\loader\IndividualDataLoader.class
 model\ownership\Appropriable.class
