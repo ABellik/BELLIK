@@ -2,9 +2,14 @@ package application;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.beans.binding.Bindings;
 
 import java.util.*;
 
@@ -13,16 +18,22 @@ import model.actors.Individual;
 import model.actors.Mentionable;
 import model.actors.Organization;
 import model.media.Media;
+import model.media.PrintMedia;
+import model.media.Radio;
+import model.media.Television;
 import model.ownership.Ownership;
 
 public class Controller {
 
     private final ObservableList<String> entityElements = FXCollections.observableArrayList("...","Personne", "Organisation", "Média");
     private final ObservableList<String> publicationTypes = FXCollections.observableArrayList("...","Article", "Reportage", "Interview");
-    private ObservableList<String> items;
 
+    //Composants de la fenêtre
     @FXML
     private Button exitButton;
+
+
+    //Composants du premier onglet
     @FXML
     private ComboBox<String> entityComboBox;
     @FXML
@@ -32,6 +43,7 @@ public class Controller {
     @FXML
     private TextArea ownershipsText;
 
+    //Composants du deuxième onglet
     @FXML
     private TextField textFieldTitle;
     @FXML
@@ -41,11 +53,19 @@ public class Controller {
     @FXML
     private ListView<String> mentionsListView;
     @FXML
+    private TextField searchMentionsTextField;
+    @FXML
+    private ListView<String> mentionablesListView;
+    @FXML
     private Button addMentionsButton;
     @FXML
     private Button removeMentionsButton;
     @FXML
     private Button publishButton;
+
+    //Composants du troisième onglet
+
+
 
     @FXML
     public void initialize(){
@@ -73,8 +93,6 @@ public class Controller {
         });
 
         /**********************************************RENSEIGNEMENTS***********************************************/
-        items = FXCollections.observableArrayList();
-        mentionsListView.setItems(items);
         entityComboBox.setItems(entityElements);
 
         nameComboBox.setValue("...");
@@ -162,6 +180,28 @@ public class Controller {
         });
 
         /**********************************************PUBLICATIONS***********************************************/
+        comboBoxPublicationType.setDisable(true);
+
+        ObservableList<String> mentionables = getMentionablesNames();
+
+        FilteredList<String> filteredMentionables = new FilteredList<>(mentionables, s -> true);
+
+        // Lie la recherche à la liste filtrée
+        searchMentionsTextField.textProperty().addListener((obs, oldVal, newVal) -> {
+            String lowerCaseFilter = newVal.toLowerCase();
+            filteredMentionables.setPredicate(name -> {
+                if (lowerCaseFilter.isEmpty()) return true;
+                return name.toLowerCase().contains(lowerCaseFilter);
+            });
+        });
+
+        // Trie alphabétique
+        SortedList<String> sortedMentionables = new SortedList<>(filteredMentionables);
+        sortedMentionables.setComparator(String::compareToIgnoreCase);
+
+        // Lie à la ListView
+        mentionablesListView.setItems(sortedMentionables);
+
         comboBoxPublicationType.setValue(publicationTypes.getFirst());
         comboBoxPublicationType.setItems(publicationTypes);
 
@@ -170,12 +210,32 @@ public class Controller {
         comboBoxMedia.setValue(names.getFirst());
         comboBoxMedia.setItems(names);
 
+        comboBoxMedia.setOnAction(event -> {
+            String selected = comboBoxMedia.getSelectionModel().getSelectedItem();
+            if (selected != null && !selected.equals("...")){
+                comboBoxPublicationType.setDisable(false);
+                Media m = DataRepository.searchMedia(selected);
+                switch (m) {
+                    case PrintMedia printMedia -> publicationTypes.setAll(new String[]{"...", "Article", "Interview"});
+                    case Television television -> publicationTypes.setAll(new String[]{"...", "Reportage", "Interview"});
+                    case Radio radio -> publicationTypes.setAll(new String[]{"...", "Reportage", "Interview"});
+                    default -> {
+                    }
+                }
+            }
+            else{
+                comboBoxPublicationType.setDisable(true);
+            }
+
+        });
+
         publishButton.setOnAction(event -> {
             String title = textFieldTitle.getText();
 
             Media media = DataRepository.searchMedia(comboBoxMedia.getValue());
 
             ObservableList<String> mentionsList = mentionsListView.getItems();
+
             Set<Mentionable> mentions = new HashSet<>();
             for(String s : mentionsList){
                 mentions.add(DataRepository.searchMentionable(s));
@@ -184,19 +244,40 @@ public class Controller {
             String publicationType = comboBoxPublicationType.getValue();
 
             media.publish(title,mentions,publicationType);
-            /*Ajouter les messages d'information (Publication réussie et alerte)*/
+            showInformationAlert("Publication réalisée avec succès !");
         });
 
         addMentionsButton.setOnAction(event -> {
-            items.add("OUI");
+            String selectedItem = mentionablesListView.getSelectionModel().getSelectedItem();
+            if (selectedItem != null) {
+                mentionsListView.getItems().add(selectedItem);
+                mentionables.remove(selectedItem); // on retire depuis la source
+                mentionsListView.getItems().sort(null);
+            }
         });
+
 
         removeMentionsButton.setOnAction(event -> {
             String selectedItem = mentionsListView.getSelectionModel().getSelectedItem();
             if (selectedItem != null) {
+                mentionables.add(selectedItem);
                 mentionsListView.getItems().remove(selectedItem);
+                mentionables.sort(null);
             }
         });
+
+        publishButton.disableProperty().bind(
+                textFieldTitle.textProperty().isEmpty()
+                        .or(comboBoxMedia.valueProperty().isNull().or(comboBoxMedia.valueProperty().isEqualTo("...")))
+                        .or(comboBoxPublicationType.valueProperty().isNull().or(comboBoxPublicationType.valueProperty().isEqualTo("...")))
+        );
+
+        /**********************************************RACHAT DE PARTS***********************************************/
+
+
+
+
+
 
     }
 
@@ -225,5 +306,30 @@ public class Controller {
             names.add(i.getName());
         }
         return FXCollections.observableArrayList(names);
+    }
+
+    public ObservableList<String> getMentionablesNames(){
+        ArrayList<String> names = new ArrayList<>();
+        List<Mentionable> mentionableList = DataRepository.getMentionables();
+        for(Mentionable i : mentionableList ){
+            names.add(i.getName());
+        }
+        return FXCollections.observableArrayList(names);
+    }
+
+    public static void showInformationAlert(String message) {
+        Alert alert = new Alert(AlertType.INFORMATION);
+        alert.setTitle("Publication validée");
+        alert.setHeaderText(null); // ou mets un en-tête si tu veux
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+    public static void showWarningAlert(String message) {
+        Alert alert = new Alert(AlertType.WARNING);
+        alert.setTitle("Alerte de la vigie");
+        alert.setHeaderText(null); // ou mets un en-tête si tu veux
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

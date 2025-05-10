@@ -41,6 +41,14 @@ public abstract class DataRepository {
         return medias;
     }
 
+    public static List<Mentionable> getMentionables() {
+        List<Mentionable> mentionables = new ArrayList<>();
+        mentionables.addAll(getIndividuals());
+        mentionables.addAll(getOrganizations());
+        mentionables.addAll(getMedias());
+        return mentionables;
+    }
+
     public static List<Ownership> getOwnerships(){
         return ownerships;
     }

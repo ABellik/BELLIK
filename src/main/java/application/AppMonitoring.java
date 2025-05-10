@@ -5,6 +5,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import model.monitoring.Monitoring;
+
+
+
 
 
 public class AppMonitoring extends Application {
@@ -16,14 +20,12 @@ public class AppMonitoring extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
 
-
+        Monitoring.setGUI_mode(true);
         Parent root = FXMLLoader.load(getClass().getResource("/main-view.fxml"));
         primaryStage.setTitle("Media Monitoring");
         primaryStage.setScene(new Scene(root));
         primaryStage.setResizable(false);
         primaryStage.show();
-
-
-
     }
+
 }

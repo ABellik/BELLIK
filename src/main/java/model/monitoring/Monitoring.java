@@ -1,5 +1,6 @@
 package model.monitoring;
 
+import application.Controller;
 import model.actors.Mentionable;
 import model.module.IndividualModule;
 import model.module.MediaModule;
@@ -15,9 +16,12 @@ public class Monitoring implements Observer {
 
     private final List<String> alertList = new ArrayList<>();
 
+    private static boolean GUI_mode = false;
+
 
     public void publishAlert(String message){
-        System.out.println(message);
+        if(!GUI_mode) System.out.println(message);
+        else Controller.showWarningAlert(message.substring(70));
     }
 
     @Override
@@ -43,6 +47,10 @@ public class Monitoring implements Observer {
                 alertList.add(alert);
             }
         }
+    }
+
+    public static void setGUI_mode(boolean GUI_mode) {
+        Monitoring.GUI_mode = GUI_mode;
     }
 
     public List<String> getAlertList() {

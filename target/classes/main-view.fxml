@@ -5,11 +5,11 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Spinner?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
@@ -80,12 +80,12 @@
                            </VBox.margin>
                         </Label>
                         <TextArea fx:id="informationsText" editable="false" promptText="Informations">
-                           <padding>
-                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                           </padding>
                            <VBox.margin>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                            </VBox.margin>
+                           <padding>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </padding>
                         </TextArea>
                         <Label text="Possessions/Parts :">
                            <VBox.margin>
@@ -115,7 +115,7 @@
                                     <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                  </HBox.margin>
                               </Label>
-                              <TextField fx:id="textFieldTitle" prefHeight="25.0" prefWidth="280.0">
+                              <TextField fx:id="textFieldTitle" prefHeight="25.0" prefWidth="280.0" promptText="Titre">
                                  <HBox.margin>
                                     <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                  </HBox.margin>
@@ -159,24 +159,30 @@
                               </ComboBox>
                            </children>
                            <padding>
-                              <Insets bottom="10.0" left="10.0" right="10.0" />
+                              <Insets left="10.0" right="10.0" />
                            </padding>
                         </HBox>
                         <Label fx:id="mentionsLabel" text="Mentions">
                            <VBox.margin>
                               <Insets left="20.0" />
                            </VBox.margin>
+                           <padding>
+                              <Insets top="10.0" />
+                           </padding>
                         </Label>
-                        <HBox prefHeight="100.0" prefWidth="200.0">
+                        <HBox>
                            <children>
                               <VBox>
                                  <children>
-                                    <ListView fx:id="mentionsListView">
+                                    <ListView fx:id="mentionsListView" prefWidth="240.0">
                                        <VBox.margin>
-                                          <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                          <Insets />
                                        </VBox.margin>
                                     </ListView>
                                  </children>
+                                 <HBox.margin>
+                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                 </HBox.margin>
                               </VBox>
                               <VBox>
                                  <children>
@@ -185,19 +191,32 @@
                                           <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                        </VBox.margin>
                                     </Button>
-                                    <Button fx:id="removeMentionsButton" mnemonicParsing="false" text="Supprimer">
+                                    <Button fx:id="removeMentionsButton" alignment="TOP_LEFT" mnemonicParsing="false" text="Supprimer">
                                        <VBox.margin>
                                           <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                        </VBox.margin>
                                     </Button>
                                  </children>
                               </VBox>
+                              <VBox>
+                                 <children>
+                                    <TextField fx:id="searchMentionsTextField" promptText="Recherche..." />
+                                    <ListView fx:id="mentionablesListView" prefWidth="240.0">
+                                       <VBox.margin>
+                                          <Insets />
+                                       </VBox.margin>
+                                    </ListView>
+                                 </children>
+                                 <HBox.margin>
+                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                 </HBox.margin>
+                              </VBox>
                            </children>
                            <VBox.margin>
-                              <Insets />
+                              <Insets bottom="10.0" />
                            </VBox.margin>
                            <padding>
-                              <Insets bottom="10.0" left="10.0" right="10.0" />
+                              <Insets left="10.0" right="10.0" />
                            </padding>
                         </HBox>
                         <Button fx:id="publishButton" alignment="TOP_LEFT" mnemonicParsing="false" text="Publier">
@@ -211,7 +230,86 @@
             </Tab>
             <Tab fx:id="rachatSection" text="Simuler un rachat de parts">
                <content>
-                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                  <VBox prefHeight="200.0" prefWidth="100.0">
+                     <children>
+                        <HBox>
+                           <children>
+                              <Label fx:id="labelTitle1" prefHeight="25.0" prefWidth="126.0" text="Vendeur de la part :">
+                                 <HBox.margin>
+                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                 </HBox.margin>
+                              </Label>
+                              <ComboBox>
+                                 <HBox.margin>
+                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                 </HBox.margin>
+                              </ComboBox>
+                           </children>
+                           <padding>
+                              <Insets left="10.0" right="10.0" top="10.0" />
+                           </padding>
+                        </HBox>
+                        <HBox>
+                           <children>
+                              <Label fx:id="labelTitle11" prefHeight="25.0" prefWidth="126.0" text="Acheteur de la part :">
+                                 <HBox.margin>
+                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                 </HBox.margin>
+                              </Label>
+                              <ComboBox>
+                                 <HBox.margin>
+                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                 </HBox.margin>
+                              </ComboBox>
+                           </children>
+                           <padding>
+                              <Insets left="10.0" right="10.0" />
+                           </padding>
+                        </HBox>
+                        <HBox>
+                           <children>
+                              <Label fx:id="labelTitle111" prefHeight="25.0" prefWidth="126.0" text="Propriété achetée :">
+                                 <HBox.margin>
+                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                 </HBox.margin>
+                              </Label>
+                              <ComboBox>
+                                 <HBox.margin>
+                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                 </HBox.margin>
+                              </ComboBox>
+                           </children>
+                           <padding>
+                              <Insets left="10.0" right="10.0" />
+                           </padding>
+                        </HBox>
+                        <HBox>
+                           <children>
+                              <Label fx:id="labelTitle1111" prefHeight="25.0" text="Pourcentage de rachat :">
+                                 <HBox.margin>
+                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                 </HBox.margin>
+                              </Label>
+                              <Spinner>
+                                 <HBox.margin>
+                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                 </HBox.margin>
+                              </Spinner>
+                           </children>
+                           <padding>
+                              <Insets left="10.0" right="10.0" />
+                           </padding>
+                           <VBox.margin>
+                              <Insets bottom="10.0" />
+                           </VBox.margin>
+                        </HBox>
+                        <Button mnemonicParsing="false" text="Valider">
+                           <VBox.margin>
+                              <Insets left="20.0" />
+                           </VBox.margin>
+                        </Button>
+                     </children>
+                  </VBox>
                </content>
             </Tab>
          </tabs>
