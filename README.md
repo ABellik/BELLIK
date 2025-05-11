@@ -52,3 +52,7 @@ Le téléchargement peut se faire:
 
 Essayez de cliquer sur l'icône Play en haut de l'écran pour vérifier que l'exécution se réalise correctement.
 Si des warnings apparaissent à l'exécution, c'est normal.
+
+Si cela ne fonctionne pas, voici un autre moyen d'exécuter utilisant un exécutable .jar :
+- Sur le terminal d'Intellij, entrez : 
+  - *java --module-path javafx-sdk-21/lib --add-modules javafx.controls,javafx.fxml -jar target/vigie-application-1.0-SNAPSHOT-shaded.jar*
