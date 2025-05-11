@@ -7,7 +7,6 @@ data\loader\IndividualDataLoader.class
 model\ownership\Appropriable.class
 model\media\Radio.class
 main\Main.class
-model\actors\NoAppropriableOrganization.class
 model\publication\Publication.class
 model\publication\Report.class
 application\Controller.class
@@ -23,7 +22,6 @@ model\ownership\Ownership.class
 data\repository\DataRepository.class
 model\media\Media.class
 model\monitoring\Monitoring.class
-model\actors\AppropriableOrganization.class
 model\media\Television.class
 model\actors\Organization.class
 model\module\MediaModule.class

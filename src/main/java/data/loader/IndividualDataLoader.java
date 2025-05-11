@@ -3,20 +3,38 @@ package data.loader;
 import model.actors.Individual;
 
 import java.io.*;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Classe responsable du chargement des données concernant les personnes depuis un fichier TSV.
+ * <p>
+ * Hérite de {@link DataLoader} avec le type générique {@link Individual}.
+ * Le fichier est attendu à l'emplacement : {@code /files/personnes.tsv} dans le classpath.
+ * Chaque ligne représente un individu avec les colonnes suivantes :
+ * <ul>
+ *     <li>Nom (String)</li>
+ *     <li>Classement Challenges 2024 (int, facultatif)</li>
+ *     <li>Classement Forbes 2024 (int, facultatif)</li>
+ * </ul>
+ * </p>
+ *
+ * @author [Adam BELLIK]
+ */
 public class IndividualDataLoader extends DataLoader<Individual>{
+    /**
+     * Charge la liste des individus à partir du fichier {@code personnes.tsv}.
+     *
+     * @return une liste d'objets {@link Individual} construits à partir du fichier
+     */
+    @Override
     public List<Individual> load(){
-        //String urlFichier = "https://raw.githubusercontent.com/mdiplo/Medias_francais/master/personnes.tsv";
         String cheminFichier = "/files/personnes.tsv";
         List<Individual> individuals = new ArrayList<>();
 
         try (InputStream is = getClass().getResourceAsStream(cheminFichier);
              BufferedReader br = new BufferedReader(new InputStreamReader(Objects.requireNonNull(is)))) {
-        //try (BufferedReader br = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/fichiers/personnes.tsv")))) {
 
             String ligne = br.readLine();
 
@@ -32,7 +50,6 @@ public class IndividualDataLoader extends DataLoader<Individual>{
 
 
             }
-
         }
         catch (IOException e) {
             System.err.println("Erreur de lecture du fichier : " + e.getMessage());

@@ -13,13 +13,11 @@ C:\Users\Adam\IdeaProjects\BELLIK\src\main\java\model\publication\Report.java
 C:\Users\Adam\IdeaProjects\BELLIK\src\main\java\model\actors\Organization.java
 C:\Users\Adam\IdeaProjects\BELLIK\src\main\java\model\actors\Owner.java
 C:\Users\Adam\IdeaProjects\BELLIK\src\main\java\model\publication\Article.java
-C:\Users\Adam\IdeaProjects\BELLIK\src\main\java\model\actors\AppropriableOrganization.java
 C:\Users\Adam\IdeaProjects\BELLIK\src\main\java\model\ownership\Appropriable.java
 C:\Users\Adam\IdeaProjects\BELLIK\src\main\java\model\publication\Interview.java
 C:\Users\Adam\IdeaProjects\BELLIK\src\main\java\model\publication\Publication.java
 C:\Users\Adam\IdeaProjects\BELLIK\src\main\java\data\loader\OrganizationDataLoader.java
 C:\Users\Adam\IdeaProjects\BELLIK\src\main\java\exceptions\MediaTypeException.java
-C:\Users\Adam\IdeaProjects\BELLIK\src\main\java\model\actors\NoAppropriableOrganization.java
 C:\Users\Adam\IdeaProjects\BELLIK\src\main\java\model\module\Module.java
 C:\Users\Adam\IdeaProjects\BELLIK\src\main\java\exceptions\PublicationTypeException.java
 C:\Users\Adam\IdeaProjects\BELLIK\src\main\java\model\media\Television.java
